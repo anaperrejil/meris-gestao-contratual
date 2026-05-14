@@ -1,0 +1,400 @@
+/* ============================================================
+   MERIS: Colors & Type
+   Source of truth: MERIS_DESIGN.md v1.0 (Abril 2026)
+   Stack base: React + Shadcn/ui + Tailwind
+   ============================================================ */
+
+/* ---------- Fonts ---------- */
+
+/* Inter variable fonts (brand: opsz 14–32, wght 100–900). */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/Inter-VariableFont_opsz_wght.ttf') format('truetype-variations');
+  font-variation-settings: 'opsz' auto;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: italic;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/Inter-Italic-VariableFont_opsz_wght.ttf') format('truetype-variations');
+  font-variation-settings: 'opsz' auto;
+}
+
+:root {
+  /* ========== 1. COLORS ========== */
+
+  /* Primary */
+  --color-primary:        #2563EB;   /* Azul principal: ações, links, CTAs */
+  --color-primary-dark:   #1D4ED8;   /* Hover */
+  --color-primary-light:  #DBEAFE;   /* Background de destaque leve */
+
+  /* Surfaces */
+  --color-bg-app:         #F8FAFC;
+  --color-bg-surface:     #FFFFFF;
+  --color-bg-subtle:      #F1F5F9;
+  --color-bg-sidebar:     #1E293B;
+  --color-bg-sidebar-item:#334155;
+
+  /* Text */
+  --color-text-primary:   #0F172A;
+  --color-text-secondary: #475569;
+  --color-text-tertiary:  #94A3B8;
+  --color-text-on-dark:   #F8FAFC;
+  --color-text-link:      #2563EB;
+
+  /* Borders */
+  --color-border:         #E2E8F0;
+  --color-border-strong:  #CBD5E1;
+
+  /* Sidebar (espelha tokens do produto: meris-dev.coodex.ai) */
+  --color-sidebar:               #FFFFFF;
+  --color-sidebar-foreground:    #0F172A;
+  --color-sidebar-border:        #E2E8F0;
+  --color-sidebar-muted:         oklch(55.4% .046 257.417);
+  --color-sidebar-accent:        oklch(93.2% .032 255);
+  --color-sidebar-accent-text:   oklch(48.8% .243 264.376);
+  --radius-sidebar:              8px;
+
+  /* Status: semantic (light mode)
+     Generic names map onto status colors. Each variant is ONE bg + ONE text token.
+     Extended palette (9 hues) covers states beyond the original 5. */
+  --color-success:        #16A34A;
+  --color-success-bg:     #DCFCE7;
+  --color-success-text:   #15803D;
+
+  --color-warning:        #D97706;
+  --color-warning-bg:     #FEF9C3;
+  --color-warning-text:   #92400E;
+
+  --color-danger:         #DC2626;
+  --color-danger-bg:      #FEE2E2;
+  --color-danger-text:    #991B1B;
+
+  --color-info:           #2563EB;
+  --color-info-bg:        #DBEAFE;
+  --color-info-text:      #1D4ED8;
+
+  --color-neutral:        #64748B;
+  --color-neutral-bg:     #F1F5F9;
+  --color-neutral-text:   #475569;
+
+  /* Extended palette — tudo dentro do sistema (sem roxo/lilás) */
+  --color-accent-bg:      #FEF3C7; --color-accent-text:      #B45309;  /* amber: starred/destaque */
+  --color-brand-bg:       #DBEAFE; --color-brand-text:       #1D4ED8;  /* azul: marca */
+  --color-highlight-bg:   #FEF3C7; --color-highlight-text:   #92400E;  /* amber: highlight */
+  --color-discovery-bg:   #FFEDD5; --color-discovery-text:   #9A3412;  /* orange: discovery */
+
+  /* On-color (texto sobre superfícies semânticas/marca) */
+  --color-on-primary: #FFFFFF;
+  --color-on-success: #052E1A;
+  --color-on-warning: #2E1F05;
+  --color-on-danger:  #FFFFFF;
+  --color-on-info:    #FFFFFF;
+
+  /* Chart tokens: semantic, sem hex cru no JS de componentes */
+  --color-chart-success:    #16A34A;  /* = success */
+  --color-chart-warning:    #EAB308;  /* warning amarelo (visibilidade no plot) */
+  --color-chart-danger:     #DC2626;  /* = danger */
+  --color-chart-info:       #2563EB;  /* = primary/info */
+  --color-chart-processing: #06B6D4;  /* cyan: sem equivalente semântico */
+  --color-chart-failed:     #EC4899;  /* pink: falha distinta de danger */
+  --color-chart-temporary:  #F97316;  /* orange: temporário */
+
+  /* Status: dark mode */
+  --color-success-bg-dark:   #052E1A; --color-success-text-dark:   #4ADE80;
+  --color-warning-bg-dark:   #2E1F05; --color-warning-text-dark:   #FACC15;
+  --color-danger-bg-dark:    #2E0A0A; --color-danger-text-dark:    #F87171;
+  --color-info-bg-dark:      #0B1F3E; --color-info-text-dark:      #60A5FA;
+  --color-neutral-bg-dark:   #1E293B; --color-neutral-text-dark:   #CBD5E1;
+  --color-accent-bg-dark:    #1E1B4B; --color-accent-text-dark:    #A78BFA;
+  --color-brand-bg-dark:     #083344; --color-brand-text-dark:     #22D3EE;
+  --color-highlight-bg-dark: #4A0E2E; --color-highlight-text-dark: #F472B6;
+  --color-discovery-bg-dark: #3A1A05; --color-discovery-text-dark: #FB923C;
+
+  /* ========== 2. TYPE ========== */
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* MERIS é mono-família (Inter only). Em contextos de código/valor usamos
+     Inter com tabular-nums + letter-spacing leve via .font-mono. */
+  --font-mono: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Scale (token: size / weight / line-height) */
+  --text-page-title-size: 24px;      --text-page-title-weight: 600;  --text-page-title-lh: 32px;
+  --text-section-title-size: 18px;   --text-section-title-weight: 600; --text-section-title-lh: 28px;
+  --text-subsection-size: 16px;      --text-subsection-weight: 500;  --text-subsection-lh: 24px;
+  --text-body-size: 14px;            --text-body-weight: 400;        --text-body-lh: 20px;
+  --text-body-medium-size: 14px;     --text-body-medium-weight: 500; --text-body-medium-lh: 20px;
+  --text-body-strong-size: 14px;     --text-body-strong-weight: 600; --text-body-strong-lh: 20px;
+  --text-label-size: 12px;           --text-label-weight: 500;       --text-label-lh: 16px;
+  --text-caption-size: 12px;         --text-caption-weight: 400;     --text-caption-lh: 16px;
+  --text-code-size: 13px;            --text-code-weight: 400;        --text-code-lh: 20px;
+  --text-kpi-size: 32px;             --text-kpi-weight: 600;         --text-kpi-lh: 40px;
+  --text-kpi-label-size: 11px;       --text-kpi-label-weight: 500;   --text-kpi-label-lh: 16px;
+
+  /* ========== 3. SPACING ========== */
+  --space-1:   4px;
+  --space-2:   8px;
+  --space-3:   12px;
+  --space-4:   16px;
+  --space-5:   20px;
+  --space-6:   24px;
+  --space-7:   28px;
+  --space-8:   32px;
+  --space-10:  40px;
+  --space-12:  48px;
+
+  /* ========== 4. RADII ========== */
+  --radius-sm: 4px;
+  --radius-md: 6px;    /* buttons, inputs */
+  --radius-lg: 8px;    /* cards */
+  --radius-full: 9999px; /* badges, avatars */
+
+  /* ========== 5. ELEVATION (shadows) ========== */
+  /* MERIS is a "flat" UI: shadows used sparingly on popovers/dropdowns/modals only. */
+  --shadow-xs: 0 1px 2px 0 rgb(15 23 42 / 0.04);
+  --shadow-sm: 0 1px 3px 0 rgb(15 23 42 / 0.06), 0 1px 2px -1px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 6px -1px rgb(15 23 42 / 0.08), 0 2px 4px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(15 23 42 / 0.08), 0 4px 6px -4px rgb(15 23 42 / 0.06);
+
+  /* ========== 6. LAYOUT ========== */
+  --sidebar-w-expanded: 220px;
+  --sidebar-w-collapsed: 64px;
+  --page-padding-x: 32px;
+  --page-padding-y: 32px;
+
+  --row-h-default: 48px;
+  --row-h-compact: 36px;
+  --row-h-header:  40px;
+}
+
+/* ============================================================
+   Semantic utility classes (drop-in)
+   ============================================================ */
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text-primary);
+  background: var(--color-bg-app);
+  font-size: var(--text-body-size);
+  line-height: var(--text-body-lh);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, .text-page-title {
+  font-size: var(--text-page-title-size);
+  font-weight: var(--text-page-title-weight);
+  line-height: var(--text-page-title-lh);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+h2, .text-section-title {
+  font-size: var(--text-section-title-size);
+  font-weight: var(--text-section-title-weight);
+  line-height: var(--text-section-title-lh);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+h3, .text-subsection {
+  font-size: var(--text-subsection-size);
+  font-weight: var(--text-subsection-weight);
+  line-height: var(--text-subsection-lh);
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+p, .text-body {
+  font-size: var(--text-body-size);
+  font-weight: var(--text-body-weight);
+  line-height: var(--text-body-lh);
+}
+
+.text-body-medium {
+  font-size: var(--text-body-medium-size);
+  font-weight: var(--text-body-medium-weight);
+  line-height: var(--text-body-medium-lh);
+}
+
+.text-body-strong {
+  font-size: var(--text-body-strong-size);
+  font-weight: var(--text-body-strong-weight);
+  line-height: var(--text-body-strong-lh);
+}
+
+.text-label {
+  font-size: var(--text-label-size);
+  font-weight: var(--text-label-weight);
+  line-height: var(--text-label-lh);
+  color: var(--color-text-secondary);
+}
+
+.text-caption {
+  font-size: var(--text-caption-size);
+  font-weight: var(--text-caption-weight);
+  line-height: var(--text-caption-lh);
+  color: var(--color-text-secondary);
+}
+
+.text-code, code, pre, .font-mono {
+  font-family: var(--font-mono);
+  font-size: var(--text-code-size);
+  line-height: var(--text-code-lh);
+  color: var(--color-text-primary);
+}
+
+.text-kpi {
+  font-size: var(--text-kpi-size);
+  font-weight: var(--text-kpi-weight);
+  line-height: var(--text-kpi-lh);
+  letter-spacing: -0.02em;
+  color: var(--color-text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Utilitário "mono": Inter com tabular-nums e leve tracking, para
+   códigos técnicos, hex codes, tokens, valores numéricos. */
+.font-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: 'cv11', 'ss03';
+  letter-spacing: 0.01em;
+}
+
+.text-kpi-label {
+  font-size: var(--text-kpi-label-size);
+  font-weight: var(--text-kpi-label-weight);
+  line-height: var(--text-kpi-label-lh);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+/* ---------- Badges ---------- */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-label-size);
+  font-weight: var(--text-label-weight);
+  line-height: var(--text-label-lh);
+  white-space: nowrap;
+}
+.badge--success { background: var(--color-success-bg); color: var(--color-success-text); }
+.badge--warning { background: var(--color-warning-bg); color: var(--color-warning-text); }
+.badge--danger  { background: var(--color-danger-bg);  color: var(--color-danger-text); }
+.badge--info    { background: var(--color-info-bg);    color: var(--color-info-text); }
+.badge--neutral { background: var(--color-neutral-bg); color: var(--color-neutral-text); }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-sans);
+  font-size: var(--text-body-medium-size);
+  font-weight: var(--text-body-medium-weight);
+  line-height: 1;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+  white-space: nowrap;
+}
+.btn--compact { height: 32px; padding: 0 12px; }
+.btn--primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+.btn--primary:hover { background: var(--color-primary-dark); }
+.btn--secondary {
+  background: var(--color-bg-subtle);
+  border-color: transparent;
+  color: var(--color-text-primary);
+}
+.btn--secondary:hover { background: #E2E8F0; }
+.btn--ghost {
+  background: transparent;
+  color: var(--color-text-link);
+}
+.btn--ghost:hover { background: var(--color-primary-light); }
+.btn--danger {
+  background: var(--color-danger);
+  color: #fff;
+}
+.btn--danger:hover { filter: brightness(0.92); }
+
+/* ---------- Inputs ---------- */
+.input, .select {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  outline: none;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+.input::placeholder { color: var(--color-text-tertiary); }
+.input:focus, .select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.15);
+}
+
+/* ---------- Cards ---------- */
+.card {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+}
+
+/* ---------- KPI Card ---------- */
+.kpi {
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---------- Tables ---------- */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-size);
+}
+.table thead th {
+  height: var(--row-h-header);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
+  font-size: var(--text-label-size);
+  font-weight: var(--text-label-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-align: left;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+.table tbody td {
+  height: var(--row-h-default);
+  padding: 0 12px;
+  border-bottom: 1px solid var(--color-border);
+  vertical-align: middle;
+}
+.table tbody tr:nth-child(odd) td { background: var(--color-bg-subtle); }
+.table tbody tr:hover td { background: var(--color-primary-light); }
+.table--compact tbody td { height: var(--row-h-compact); }

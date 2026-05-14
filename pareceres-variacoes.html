@@ -1,0 +1,1090 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280">
+<title>MERIS · Pareceres — duas versões</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="meris-tokens.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Variante A — Triagem por urgência */
+  .va-toolbar {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+  .va-counts {
+    display: inline-flex; align-items: baseline; gap: 6px;
+    font-size: 13px; color: var(--color-text-secondary);
+  }
+  .va-counts strong {
+    font-size: 22px; font-weight: 700; color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .va-pills { display: flex; gap: 4px; flex-wrap: wrap; }
+  .va-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    border: 1px solid var(--color-border);
+    background: #fff;
+    font: inherit; font-size: 13px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+  .va-pill:hover { background: var(--color-bg-subtle); }
+  .va-pill--active {
+    background: var(--color-bg-subtle);
+    color: var(--color-text-primary);
+    border-color: var(--color-border-strong);
+    font-weight: 500;
+  }
+  .va-pill__count {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 18px; height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--color-bg-subtle);
+    color: var(--color-text-tertiary);
+    font-size: 11px; font-weight: 600;
+  }
+  .va-pill--active .va-pill__count {
+    background: #fff;
+    color: var(--color-text-primary);
+  }
+
+  .va-list { display: flex; flex-direction: column; gap: 8px; }
+  .va-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 120ms ease, background 120ms ease;
+  }
+  .va-row:hover { border-color: var(--color-border-strong); background: var(--color-bg-subtle); }
+  .va-row__main { min-width: 0; }
+  .va-row__top {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .va-row__subject {
+    font-size: 14px; font-weight: 500; color: var(--color-text-primary);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .va-row__meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--color-text-tertiary);
+    overflow: hidden;
+  }
+  .va-row__meta-strong { color: var(--color-text-secondary); font-weight: 500; }
+  .va-row__sep { opacity: 0.5; }
+  .va-row__time {
+    font-size: 12px; color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .va-row__actions { display: flex; gap: 4px; }
+
+  /* Variante toggle no topo do conteúdo */
+  .variant-switch {
+    display: inline-flex; gap: 0;
+    padding: 3px;
+    background: var(--color-bg-subtle);
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+  .variant-switch__btn {
+    font: inherit;
+    padding: 8px 16px;
+    border: 0; background: transparent;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    transition: background 120ms ease, color 120ms ease;
+  }
+  .variant-switch__btn:hover { color: var(--color-text-primary); }
+  .variant-switch__btn--active {
+    background: #fff;
+    color: var(--color-text-primary);
+    box-shadow: 0 1px 2px rgba(15,23,42,0.06);
+  }
+  .variant-note {
+    margin-bottom: 16px;
+    padding: 10px 14px;
+    background: var(--color-info-bg);
+    border: 1px solid rgba(37,99,235,0.18);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--color-info-text);
+  }
+  .variant-note strong { font-weight: 600; }
+
+  /* Versão C — Saudação + dashboard + grupos como cards */
+  .vc-greet {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(15,23,42,0.03);
+  }
+  .vc-greet__main { flex: 1; min-width: 0; }
+  .vc-greet__eyebrow {
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--color-primary);
+    margin-bottom: 4px;
+  }
+  .vc-greet__title {
+    font-size: 16px; font-weight: 600;
+    color: var(--color-text-primary);
+    margin-bottom: 4px;
+    line-height: 1.35;
+  }
+  .vc-greet__body {
+    font-size: 14px; line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+  .vc-greet__body strong { color: var(--color-text-primary); font-weight: 600; }
+  .vc-greet__period {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-top: 8px;
+  }
+
+  .vc-kpis {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .vc-kpi {
+    padding: 18px 20px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 2px rgba(15,23,42,0.03);
+  }
+  .vc-kpi__head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .vc-kpi__icon {
+    width: 32px; height: 32px;
+    border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .vc-kpi__label {
+    flex: 1;
+    font-size: 14px; font-weight: 500;
+    color: var(--color-text-primary);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .vc-kpi__label-sub {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-weight: 400;
+  }
+  .vc-kpi__more {
+    width: 28px; height: 28px;
+    border-radius: 9999px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 120ms ease;
+  }
+  .vc-kpi__more:hover { background: var(--color-bg-subtle); }
+  .vc-kpi__row {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    gap: 10px;
+  }
+  .vc-kpi__value {
+    font-size: 30px; font-weight: 700;
+    color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .vc-kpi__chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 9px;
+    border-radius: 9999px;
+    font-size: 11px; font-weight: 500;
+    line-height: 16px;
+    white-space: nowrap;
+  }
+  .vc-kpi--blue   .vc-kpi__icon { background: #DBEAFE; color: #2563EB; }
+  .vc-kpi--blue   .vc-kpi__chip { background: #DBEAFE; color: #1D4ED8; }
+  .vc-kpi--green  .vc-kpi__icon { background: #DCFCE7; color: #15803D; }
+  .vc-kpi--green  .vc-kpi__chip { background: #DCFCE7; color: #15803D; }
+  .vc-kpi--yellow .vc-kpi__icon { background: #FEF9C3; color: #92400E; }
+  .vc-kpi--yellow .vc-kpi__chip { background: #FEF9C3; color: #92400E; }
+  .vc-kpi--red    .vc-kpi__icon { background: #FEE2E2; color: #991B1B; }
+  .vc-kpi--red    .vc-kpi__chip { background: #FEE2E2; color: #991B1B; }
+
+  .vc-kpi--active { border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(37,99,235,0.15); }
+  .vc-kpi--active .vc-kpi__more { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+
+  .vc-filter-bar {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    background: var(--color-info-bg);
+    border: 1px solid rgba(37,99,235,0.18);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--color-info-text);
+  }
+  .vc-filter-bar__clear {
+    margin-left: auto;
+    display: inline-flex; align-items: center; gap: 4px;
+    background: transparent; border: 0; padding: 4px 8px;
+    border-radius: 4px;
+    font: inherit; font-size: 12px; font-weight: 500;
+    color: inherit; cursor: pointer;
+  }
+  .vc-filter-bar__clear:hover { background: rgba(37,99,235,0.1); }
+
+  .vc-group--collapsed .vc-cards { display: none; }
+  .vc-group--collapsed .vc-group__head { padding-bottom: 0; border-bottom: 0; margin-bottom: 0; }
+
+  /* Cada grupo vira um card */
+  .vc-group {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    padding: 14px 16px 16px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 2px rgba(15,23,42,0.03);
+  }
+  .vc-group__head {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    align-items: center;
+    gap: 20px;
+    padding: 4px 0 14px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 10px;
+  }
+  .vc-group__left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .vc-group__main { min-width: 0; }
+  .vc-group__name {
+    font-size: 15px; font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.3;
+  }
+  .vc-group__sub {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+  .vc-group__sub--mono { font-family: ui-monospace, SFMono-Regular, "SF Mono", Consolas, monospace; }
+  .vc-group__stat { text-align: right; line-height: 1.2; }
+  .vc-group__stat-value {
+    font-size: 15px; font-weight: 600;
+    color: var(--color-text-primary);
+    font-variant-numeric: tabular-nums;
+  }
+  .vc-group__stat-value--critical { color: var(--color-danger-text); }
+  .vc-group__stat-value--path { color: var(--color-warning-text); }
+  .vc-group__stat-label {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+  .vc-group__toggle {
+    width: 32px; height: 32px;
+    border-radius: 9999px;
+    border: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-text-secondary);
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 120ms ease, transform 120ms ease;
+  }
+  .vc-group__toggle:hover { background: var(--color-bg-subtle); }
+  .vc-group__toggle--open { transform: rotate(180deg); }
+
+  .vc-group__avatar {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+  }
+
+  .vc-list { display: flex; flex-direction: column; }
+  .vc-cards { display: flex; flex-direction: column; }
+  .vc-doc {
+    display: flex; flex-direction: column;
+    gap: 8px;
+    padding: 16px 0 18px;
+    border-top: 1px solid var(--color-border);
+  }
+  .vc-doc:first-child { border-top: 0; padding-top: 12px; }
+  .vc-doc__head {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .vc-doc__subject {
+    flex: 1; min-width: 0;
+    font-size: 14px; font-weight: 600;
+    color: var(--color-text-primary);
+    line-height: 1.4;
+  }
+  .vc-doc__time {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .vc-doc__meta {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    flex-wrap: wrap;
+  }
+  .vc-doc__meta-strong { color: var(--color-text-secondary); font-weight: 500; }
+  .vc-doc__meta-sep { opacity: 0.5; }
+  .vc-doc__meta svg { color: var(--color-text-tertiary); }
+  .vc-doc__summary {
+    font-size: 13px; line-height: 1.5;
+    color: var(--color-text-primary);
+  }
+  .vc-doc__just {
+    display: flex; gap: 10px;
+    padding: 10px 12px;
+    background: var(--color-bg-subtle);
+    border-radius: 6px;
+    font-size: 12px; line-height: 1.45;
+    color: var(--color-text-secondary);
+  }
+  .vc-doc__just-label {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+  .vc-doc__actions {
+    display: flex; align-items: center; gap: 4px;
+    margin-top: 2px;
+  }
+  .vc-doc__actions-spacer { flex: 1; }
+  .vc-doc__open {
+    display: inline-flex; align-items: center; gap: 4px;
+    font: inherit; font-size: 13px; font-weight: 500;
+    color: var(--color-primary);
+    background: transparent; border: 0;
+    padding: 4px 6px;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  .vc-doc__open:hover { background: var(--color-primary-light); }
+
+  /* Botão "marcar como visto" estado seen */
+  .icon-btn--seen { color: var(--color-primary); background: var(--color-primary-light); }
+  .vc-doc--seen .vc-doc__subject { color: var(--color-text-secondary); font-weight: 500; }
+  .vc-doc--seen .vc-doc__summary { color: var(--color-text-tertiary); }
+
+  /* Dropdown menu (botão "Mais") */
+  .menu-wrap { position: relative; display: inline-flex; }
+  .menu-pop {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 240px;
+    padding: 4px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(15,23,42,0.12);
+    z-index: 30;
+    display: flex; flex-direction: column;
+  }
+  .menu-item {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%;
+    padding: 8px 10px;
+    font: inherit; font-size: 13px;
+    background: transparent; border: 0;
+    border-radius: 4px;
+    color: var(--color-text-primary);
+    cursor: pointer;
+    text-align: left;
+  }
+  .menu-item:hover { background: var(--color-bg-subtle); }
+  .menu-item svg { color: var(--color-text-tertiary); }
+  .menu-item--danger { color: var(--color-danger); }
+  .menu-item--danger svg { color: var(--color-danger); }
+  .menu-sep { height: 1px; background: var(--color-border); margin: 4px 6px; }
+  .vc-row {
+    display: grid;
+    grid-template-columns: 152px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 4px;
+    cursor: pointer;
+    border-top: 1px solid var(--color-border);
+    transition: background 120ms ease;
+    border-radius: 6px;
+  }
+  .vc-row:first-child { border-top: 0; }
+  .vc-row:hover { background: var(--color-bg-subtle); }
+  .vc-row__main { min-width: 0; }
+  .vc-row__subject {
+    font-size: 14px; font-weight: 500;
+    color: var(--color-text-primary);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    line-height: 1.35;
+  }
+  .vc-row__meta {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .vc-row__meta-strong { color: var(--color-text-secondary); }
+  .vc-row__sep { opacity: 0.5; }
+  .vc-row__time {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .vc-row__actions { display: flex; gap: 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="icons.jsx?v=2"></script>
+<script type="text/babel" src="data.jsx?v=2"></script>
+<script type="text/babel" src="components.jsx?v=2"></script>
+<script type="text/babel" src="modals.jsx?v=2"></script>
+
+<script type="text/babel">
+  // ─────────────────────────────────────────────────────────────────────────
+  // Dropdown menu (botão "Mais")
+  // ─────────────────────────────────────────────────────────────────────────
+  function Dropdown({ trigger, items }) {
+    const [open, setOpen] = React.useState(false);
+    const ref = React.useRef(null);
+    React.useEffect(() => {
+      if (!open) return;
+      const onDoc = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+      const onEsc = (e) => { if (e.key === 'Escape') setOpen(false); };
+      document.addEventListener('mousedown', onDoc);
+      document.addEventListener('keydown', onEsc);
+      return () => { document.removeEventListener('mousedown', onDoc); document.removeEventListener('keydown', onEsc); };
+    }, [open]);
+    return (
+      <span className="menu-wrap" ref={ref}>
+        <span onClick={(e) => { e.stopPropagation(); setOpen(v => !v); }}>{trigger}</span>
+        {open && (
+          <div className="menu-pop" role="menu">
+            {items.map((it, i) => it.divider
+              ? <div key={i} className="menu-sep"/>
+              : (
+                <button key={i}
+                  className={`menu-item ${it.danger ? 'menu-item--danger' : ''}`}
+                  onClick={(e) => { e.stopPropagation(); setOpen(false); it.onClick && it.onClick(); }}>
+                  {it.icon}
+                  <span>{it.label}</span>
+                </button>
+              ))}
+          </div>
+        )}
+      </span>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Variante A — Triagem por urgência (lista única ordenada por prioridade)
+  // ─────────────────────────────────────────────────────────────────────────
+  function VariantA({ pareceres, onToggleStar, onOpen }) {
+    const [filter, setFilter] = React.useState('all');
+    const counts = {
+      all: pareceres.length,
+      path: pareceres.filter(p => p.pathRisk).length,
+      critical: pareceres.filter(p => !p.pathRisk && p.criticality === 'critical').length,
+      starred: pareceres.filter(p => p.starred).length,
+    };
+    const filtered = pareceres
+      .filter(p => {
+        if (filter === 'all') return true;
+        if (filter === 'path') return !!p.pathRisk;
+        if (filter === 'critical') return !p.pathRisk && p.criticality === 'critical';
+        if (filter === 'starred') return p.starred;
+        return true;
+      })
+      .sort((a, b) => {
+        const w = (p) => (p.pathRisk ? 0 : (p.criticality === 'critical' ? 1 : 2));
+        return w(a) - w(b);
+      });
+    const Pills = [
+      { id: 'all', label: 'Todos', n: counts.all },
+      { id: 'path', label: 'Em caminho crítico', n: counts.path },
+      { id: 'critical', label: 'Críticos', n: counts.critical },
+      { id: 'starred', label: 'Em acompanhamento', n: counts.starred },
+    ];
+    return (
+      <div className="page">
+        <div className="variant-note">
+          <strong>Versão A — Triagem por urgência.</strong> Lista única, plana, ordenada por prioridade.
+          Sem agrupamento por área. "Em acompanhamento" entra como filtro, não como bloco separado. Pensada
+          para o gestor atacar rápido a fila do dia.
+        </div>
+        <div className="va-toolbar">
+          <div className="va-counts">
+            <strong>{counts.all}</strong> pareceres
+          </div>
+          <div className="va-pills">
+            {Pills.map(p => (
+              <button key={p.id}
+                className={`va-pill ${filter === p.id ? 'va-pill--active' : ''}`}
+                onClick={() => setFilter(p.id)}>
+                {p.label}
+                <span className="va-pill__count">{p.n}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="va-list">
+          {filtered.length === 0 && (
+            <div className="empty"><div className="empty__sub">Nenhum parecer com este filtro.</div></div>
+          )}
+          {filtered.map(p => {
+            const group = window.GROUPS[p.group];
+            return (
+              <div key={p.id} className="va-row" onClick={() => onOpen(p)}>
+                <span style={{minWidth: 142, display:'inline-flex'}}>
+                  {p.pathRisk ? <window.PathBadge/> : <window.CritBadge kind={p.criticality}/>}
+                </span>
+                <div className="va-row__main">
+                  <div className="va-row__top">
+                    <div className="va-row__subject">{p.subject}</div>
+                  </div>
+                  <div className="va-row__meta">
+                    <span className="va-row__meta-strong">{p.senderName}</span>
+                    <span className="va-row__sep">·</span>
+                    <span>{group.label}</span>
+                  </div>
+                </div>
+                <span className="va-row__time">{p.date}</span>
+                <div className="va-row__actions" onClick={e => e.stopPropagation()}>
+                  <button className={`icon-btn ${p.starred ? 'icon-btn--starred' : ''}`}
+                    title={p.starred ? 'Remover dos acompanhados' : 'Acompanhar'}
+                    onClick={() => onToggleStar(p)}>
+                    {p.starred ? <window.I.StarFilled size={14}/> : <window.I.Star size={14}/>}
+                  </button>
+                  <button className="icon-btn" title="Mais" onClick={(e) => { e.stopPropagation(); }}>
+                    <window.I.MoreHorizontal size={14}/>
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Variante C — Dashboard simples + grupos por área + cards compactos
+  // ─────────────────────────────────────────────────────────────────────────
+  function VariantC({ pareceres, onToggleStar, onOpen, onReclassify, onMarkSeen, onMore }) {
+    const total = pareceres.length;
+    const onPath = pareceres.filter(p => p.pathRisk).length;
+    const critical = pareceres.filter(p => !p.pathRisk && p.criticality === 'critical').length;
+    const starred = pareceres.filter(p => p.starred).length;
+
+    const [kpiFilter, setKpiFilter] = React.useState(null); // null | 'all' | 'path' | 'critical' | 'starred'
+    const [collapsed, setCollapsed] = React.useState({});
+
+    const filtered = React.useMemo(() => {
+      if (!kpiFilter || kpiFilter === 'all') return pareceres;
+      if (kpiFilter === 'path') return pareceres.filter(p => p.pathRisk);
+      if (kpiFilter === 'critical') return pareceres.filter(p => !p.pathRisk && p.criticality === 'critical');
+      if (kpiFilter === 'starred') return pareceres.filter(p => p.starred);
+      return pareceres;
+    }, [pareceres, kpiFilter]);
+
+    const grouped = React.useMemo(() => {
+      const map = {};
+      filtered.forEach(p => { (map[p.group] = map[p.group] || []).push(p); });
+      Object.values(map).forEach(arr => arr.sort((a, b) => {
+        const w = (p) => (p.pathRisk ? 0 : p.criticality === 'critical' ? 1 : 2);
+        return w(a) - w(b);
+      }));
+      return Object.entries(map).sort(([,a],[,b]) => {
+        const ca = a.filter(p => p.pathRisk || p.criticality === 'critical').length;
+        const cb = b.filter(p => p.pathRisk || p.criticality === 'critical').length;
+        return cb - ca;
+      });
+    }, [filtered]);
+
+    const setFilter = (id) => setKpiFilter(prev => prev === id ? null : id);
+    const toggleCollapse = (id) => setCollapsed(prev => ({ ...prev, [id]: !prev[id] }));
+    const FILTER_LABELS = {
+      all: 'todos os pareceres',
+      path: 'em caminho crítico',
+      critical: 'críticos',
+      starred: 'em acompanhamento',
+    };
+
+    const frequency = window.MERIS_FREQUENCY || 'semanal';
+    const periodLabel = frequency === 'diario' ? 'diário' : 'semanal';
+    const periodSpan = frequency === 'diario' ? 'nas últimas 24h' : 'nos últimos 7 dias';
+    const firstName = 'Ana';
+    return (
+      <div className="page">
+        <div className="variant-note">
+          <strong>Versão C — Saudação + KPIs + grupos compactos.</strong> Abre com um resumo amigável
+          do período, painel de KPIs e pareceres por área em listas compactas.
+        </div>
+
+        <div className="vc-greet">
+          <window.MerisAvatar size={40}/>
+          <div className="vc-greet__main">
+            <div className="vc-greet__eyebrow">Monitoramento {periodLabel}</div>
+            <div className="vc-greet__title">Oi, {firstName}. Aqui está o que o @meris trouxe {periodSpan}.</div>
+            <div className="vc-greet__body">
+              Analisei <strong>247 e-mails</strong> da matriz de comunicação e levantei <strong>{total} pareceres</strong>
+              {onPath > 0 && <> · <strong>{onPath} em caminho crítico</strong></>}
+              {critical > 0 && <> · <strong>{critical} crítico{critical > 1 ? 's' : ''}</strong></>}
+              {(onPath > 0 || critical > 0) ? '. Sugiro começar pelos itens em destaque.' : '. Nada urgente no horizonte.'}
+            </div>
+            <div className="vc-greet__period">
+              <window.I.Calendar size={12}/>
+              <span>Período: {periodSpan} · próximo resumo {frequency === 'diario' ? 'amanhã às 8h' : 'segunda-feira'}</span>
+            </div>
+          </div>
+        </div>
+
+        <div className="vc-kpis">
+          {[
+            { id: 'all', tone: 'blue', icon: 'Inbox', label: 'Pareceres na fila', value: total, chip: 'últimos 7 dias' },
+            { id: 'path', tone: 'yellow', icon: 'AlertTriangle', label: 'Em caminho crítico', value: onPath, chip: `de ${total}` },
+            { id: 'critical', tone: 'red', icon: 'AlertOctagon', label: 'Críticos', value: critical, chip: 'não atendidos' },
+            { id: 'starred', tone: 'green', icon: 'StarFilled', label: 'Em acompanhamento', value: starred, chip: 'marcados' },
+          ].map(kpi => {
+            const Icon = window.I[kpi.icon];
+            const isActive = kpiFilter === kpi.id;
+            return (
+              <div key={kpi.id} className={`vc-kpi vc-kpi--${kpi.tone} ${isActive ? 'vc-kpi--active' : ''}`}>
+                <div className="vc-kpi__head">
+                  <span className="vc-kpi__icon"><Icon size={18}/></span>
+                  <span className="vc-kpi__label">{kpi.label}</span>
+                  <button className="vc-kpi__more"
+                    onClick={() => setFilter(kpi.id)}
+                    title={isActive ? 'Limpar filtro' : `Filtrar por ${kpi.label.toLowerCase()}`}
+                    aria-label={isActive ? 'Limpar filtro' : `Filtrar por ${kpi.label}`}>
+                    {isActive ? <window.I.X size={14}/> : <window.I.ChevronRight size={14}/>}
+                  </button>
+                </div>
+                <div className="vc-kpi__row">
+                  <span className="vc-kpi__value">{kpi.value}</span>
+                  <span className="vc-kpi__chip">{kpi.chip}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {kpiFilter && (
+          <div className="vc-filter-bar" role="status">
+            <window.I.Filter size={14}/>
+            <span>Filtrando por <strong>{FILTER_LABELS[kpiFilter]}</strong> · {filtered.length} parecer{filtered.length !== 1 ? 'es' : ''}</span>
+            <button className="vc-filter-bar__clear" onClick={() => setKpiFilter(null)}>
+              <window.I.X size={12}/> Limpar filtro
+            </button>
+          </div>
+        )}
+
+        {grouped.map(([groupId, items]) => {
+          const group = window.GROUPS[groupId];
+          const Icon = window.I[group.icon] || window.I.Folders;
+          const onPath = items.filter(p => p.pathRisk).length;
+          const ncrit = items.filter(p => !p.pathRisk && p.criticality === 'critical').length;
+          const isCollapsed = !!collapsed[groupId];
+          return (
+            <div key={groupId} className={`vc-group ${isCollapsed ? 'vc-group--collapsed' : ''}`}>
+              <div className="vc-group__head">
+                <div className="vc-group__left">
+                  <span className="vc-group__avatar"><Icon size={18}/></span>
+                  <div className="vc-group__main">
+                    <div className="vc-group__name">{group.label}</div>
+                    <div className="vc-group__sub">{items.length} parecer{items.length !== 1 ? 'es' : ''} · <span className="vc-group__sub--mono">{group.email}</span></div>
+                  </div>
+                </div>
+                <div className="vc-group__stat">
+                  <div className={`vc-group__stat-value ${onPath > 0 ? 'vc-group__stat-value--path' : ''}`}>{onPath}</div>
+                  <div className="vc-group__stat-label">Em caminho crítico</div>
+                </div>
+                <div className="vc-group__stat">
+                  <div className={`vc-group__stat-value ${ncrit > 0 ? 'vc-group__stat-value--critical' : ''}`}>{ncrit}</div>
+                  <div className="vc-group__stat-label">Críticos</div>
+                </div>
+                <button className={`vc-group__toggle ${!isCollapsed ? 'vc-group__toggle--open' : ''}`}
+                  onClick={() => toggleCollapse(groupId)}
+                  aria-expanded={!isCollapsed}
+                  aria-label={isCollapsed ? 'Expandir' : 'Recolher'}>
+                  <window.I.ChevronDown size={14}/>
+                </button>
+              </div>
+              <div className="vc-cards">
+                {items.map(p => {
+                  const groupOfP = window.GROUPS[p.group];
+                  return (
+                    <div key={p.id} className={`vc-doc ${p.seen ? 'vc-doc--seen' : ''}`}>
+                      <div className="vc-doc__head">
+                        {p.pathRisk ? <window.PathBadge/> : <window.CritBadge kind={p.criticality}/>}
+                        <div className="vc-doc__subject">{p.subject}</div>
+                        <span className="vc-doc__time">{p.date}</span>
+                      </div>
+                      <div className="vc-doc__meta">
+                        <window.I.Mail size={12}/>
+                        <span className="vc-doc__meta-strong">{p.senderName}</span>
+                        <span className="vc-doc__meta-sep">·</span>
+                        <span>{p.sender}</span>
+                        <span className="vc-doc__meta-sep">·</span>
+                        <window.I.Tag size={12}/>
+                        <span>{groupOfP.label}</span>
+                      </div>
+                      <div className="vc-doc__summary">{p.summary}</div>
+                      {p.justification && (
+                        <div className="vc-doc__just">
+                          <span className="vc-doc__just-label">Justificativa</span>
+                          <span>{p.justification}</span>
+                        </div>
+                      )}
+                      <div className="vc-doc__actions" onClick={e => e.stopPropagation()}>
+                        <button className={`icon-btn ${p.starred ? 'icon-btn--starred' : ''}`}
+                          title={p.starred ? 'Remover dos acompanhados' : 'Acompanhar'}
+                          onClick={() => onToggleStar(p)}>
+                          {p.starred ? <window.I.StarFilled size={14}/> : <window.I.Star size={14}/>}
+                        </button>
+                        <button className="icon-btn" title="Reclassificar"
+                          onClick={() => onReclassify(p)}>
+                          <window.I.Refresh size={14}/>
+                        </button>
+                        <button className={`icon-btn ${p.seen ? 'icon-btn--seen' : ''}`}
+                          title={p.seen ? 'Marcar como não visto' : 'Marcar como visto'}
+                          onClick={() => onMarkSeen(p)}>
+                          <window.I.Eye size={14}/>
+                        </button>
+                        <Dropdown
+                          trigger={<button className="icon-btn" title="Mais"><window.I.MoreHorizontal size={14}/></button>}
+                          items={[
+                            { icon: <window.I.Users size={14}/>, label: 'Compartilhar análise', onClick: () => onMore(p, 'share') },
+                            { icon: <window.I.Send size={14}/>, label: 'Notificar grupo', onClick: () => onMore(p, 'notify') },
+                          ]}/>
+                        <span className="vc-doc__actions-spacer"></span>
+                        <button className="vc-doc__open" onClick={() => onOpen(p)}>
+                          Abrir análise <window.I.ChevronRight size={14}/>
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Variante B — Por área e contexto (estrutura atual: pinned + banners + grupos)
+  // ─────────────────────────────────────────────────────────────────────────
+  function VariantB({ pareceres, onToggleStar, onOpen }) {
+    const [justStarred, setJustStarred] = React.useState(null);
+    const starred = pareceres.filter(p => p.starred);
+    const groupedEntries = React.useMemo(() => {
+      const map = {};
+      pareceres.forEach(p => { (map[p.group] = map[p.group] || []).push(p); });
+      return Object.entries(map).sort(([,a],[,b]) => {
+        const ca = a.filter(p => p.criticality === 'critical').length;
+        const cb = b.filter(p => p.criticality === 'critical').length;
+        return cb - ca;
+      });
+    }, [pareceres]);
+    const completeParecer = () => {};
+    const criticalPath = pareceres.filter(p => p.pathRisk === 'critical').length;
+    const preventivePath = pareceres.filter(p => p.pathRisk === 'preventive').length;
+    return (
+      <div className="page">
+        <div className="variant-note">
+          <strong>Versão B — Por área e contexto.</strong> "Em acompanhamento" no topo + banners de
+          caminho crítico + pareceres agrupados pela área de origem (Engenharia, Suprimentos, etc.).
+          Pensada para entender o panorama por equipe.
+        </div>
+
+        {criticalPath > 0 && (
+          <window.CriticalPathBanner kind="critical" items={criticalPath} active={false}
+            onFilter={() => {}} onDismiss={() => {}} />
+        )}
+        {preventivePath > 0 && (
+          <window.CriticalPathBanner kind="preventive" items={preventivePath} active={false}
+            onFilter={() => {}} onDismiss={() => {}} />
+        )}
+
+        <window.PinnedStrip
+          pareceres={starred}
+          onToggleStar={onToggleStar}
+          onOpen={onOpen}
+          onComplete={completeParecer}
+        />
+
+        {groupedEntries.map(([groupId, items]) => {
+          const group = window.GROUPS[groupId];
+          const ncrit = items.filter(p => p.criticality === 'critical').length;
+          const ninfo = items.length - ncrit;
+          return (
+            <div key={groupId} className="group">
+              <div className="group__head">
+                <span className="group__name">{group.label}</span>
+                <div className="group__counts">
+                  {ncrit > 0 && <span className="crit-badge crit-badge--critical">{ncrit} crítico{ncrit > 1 ? 's' : ''}</span>}
+                  {ninfo > 0 && <span className="group__count-muted">{ninfo} demais</span>}
+                </div>
+                <button className="group__chevron"><window.I.ChevronDown size={16}/></button>
+              </div>
+              {items.map(p => (
+                <window.ParecerCard
+                  key={p.id}
+                  p={p}
+                  onToggleStar={onToggleStar}
+                  onOpen={onOpen}
+                  onReclassify={() => {}}
+                  justAdded={justStarred === p.id}
+                />
+              ))}
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Page wrapper — Shell + variant switch
+  // ─────────────────────────────────────────────────────────────────────────
+  function PageWrapper() {
+    const [pareceres, setPareceres] = React.useState(window.PARECERES);
+    const [variant, setVariant] = React.useState('C');
+    const [reclassifyTarget, setReclassifyTarget] = React.useState(null);
+    const [shareTarget, setShareTarget] = React.useState(null);
+    const [notifyTarget, setNotifyTarget] = React.useState(null);
+    const [participantsByParecer, setParticipantsByParecer] = React.useState({});
+    const [toast, setToast] = React.useState(null);
+
+    const showToast = (text) => { setToast(text); setTimeout(() => setToast(null), 2400); };
+
+    const toggleStar = (p) => {
+      setPareceres(prev => prev.map(x =>
+        x.id === p.id ? { ...x, starred: !x.starred } : x
+      ));
+    };
+    const markSeen = (p) => {
+      setPareceres(prev => prev.map(x =>
+        x.id === p.id ? { ...x, seen: !x.seen } : x
+      ));
+    };
+    const confirmReclassify = ({ to, reason, note }) => {
+      const target = reclassifyTarget;
+      if (!target) return;
+      setPareceres(prev => prev.map(x => x.id === target.id ? { ...x, criticality: to } : x));
+      setReclassifyTarget(null);
+      showToast(`Parecer reclassificado para ${to === 'critical' ? 'crítico' : to === 'preventive' ? 'preventivo' : 'informativo'}.`);
+    };
+    const handleMore = (p, action) => {
+      if (action === 'share') return setShareTarget(p);
+      if (action === 'notify') return setNotifyTarget(p);
+    };
+    const confirmShare = (selectedUsers) => {
+      const target = shareTarget;
+      if (!target) return;
+      setParticipantsByParecer(prev => ({
+        ...prev,
+        [target.id]: [...(prev[target.id] || []), ...selectedUsers.filter(u => !(prev[target.id] || []).some(x => x.id === u.id))],
+      }));
+      setShareTarget(null);
+      showToast(`Análise compartilhada com ${selectedUsers.length} pessoa${selectedUsers.length > 1 ? 's' : ''}.`);
+    };
+    const confirmNotify = () => {
+      setNotifyTarget(null);
+      showToast('Notificação interna enviada aos destinatários.');
+    };
+    const open = () => {}; // somente comparação visual
+
+    return (
+      <div className="app">
+        {/* Rail */}
+        <aside className="rail">
+          <div className="rail__top">
+            <div className="rail__mark" title="MERIS">M</div>
+          </div>
+          <div className="rail__modules">
+            <div className="rail__group">
+              <button className="rail__item" title="Procurement"><window.I.ShoppingBag size={16}/></button>
+              <button className="rail__item" title="Planejamento"><window.I.Activity size={16}/></button>
+              <button className="rail__item" title="Engenharia"><window.I.HardHat size={16}/></button>
+              <button className="rail__item rail__item--disabled" disabled title="Suprimentos (Em breve)"><window.I.Truck size={16}/></button>
+              <button className="rail__item rail__item--disabled" disabled title="C&M (Em breve)"><window.I.Wrench size={16}/></button>
+              <button className="rail__item rail__item--active" title="Gestão Contratual"><window.I.BookOpenText size={16}/></button>
+              <button className="rail__item" title="Qualidade"><window.I.FlaskConical size={16}/></button>
+              <button className="rail__item" title="Comissionamento"><window.I.PackageCheck size={16}/></button>
+            </div>
+            <div className="rail__divider"></div>
+            <div className="rail__group">
+              <button className="rail__item" title="Documentos"><window.I.Folders size={16}/></button>
+              <button className="rail__item" title="Ativos"><window.I.Locate size={16}/></button>
+            </div>
+          </div>
+          <div className="rail__footer">
+            <button className="rail__item" title="Suporte"><window.I.Life size={16}/></button>
+            <button className="rail__item" title="Ajuda"><window.I.Help size={16}/></button>
+            <button className="rail__item" title="Configurações"><window.I.Settings size={16}/></button>
+            <div className="rail__avatar" title="Ana Perrejil">AP</div>
+          </div>
+        </aside>
+
+        {/* Sub-nav */}
+        <nav className="subnav">
+          <div className="subnav__head">
+            <div className="subnav__title">Gestão Contratual</div>
+            <button className="subnav__collapse" title="Recolher menu"><window.I.PanelRightOpen size={16}/></button>
+          </div>
+          <div className="subnav__body">
+            <button className="subnav__parent subnav__parent--active">
+              <span className="subnav__parent-left">
+                <window.I.FileChartLine size={16}/>
+                <span>Monitoramento</span>
+              </span>
+              <span className="subnav__chev subnav__chev--open"><window.I.ChevronDown size={16}/></span>
+            </button>
+            <div className="subnav__children">
+              <button className="subnav__child">
+                <span className="subnav__leaf"/>
+                <span className="subnav__child-label">Análises em aberto</span>
+              </button>
+              <button className="subnav__child">
+                <span className="subnav__leaf"/>
+                <span className="subnav__child-label">Resumos periódicos</span>
+              </button>
+            </div>
+          </div>
+        </nav>
+
+        {/* Main */}
+        <main className="main">
+          <div className="topbar">
+            <div className="topbar__left">
+              <nav className="topbar__breadcrumb" aria-label="Breadcrumb">
+                <button className="topbar__breadcrumb-home" title="Início"><window.I.Home size={16}/></button>
+                <window.I.ChevronRight size={14} className="topbar__breadcrumb-sep"/>
+                <span className="topbar__breadcrumb-module">Gestão Contratual</span>
+                <window.I.ChevronRight size={14} className="topbar__breadcrumb-sep"/>
+                <span className="topbar__breadcrumb-page">Pareceres — comparação A/B</span>
+              </nav>
+            </div>
+            <div className="topbar__right">
+              <button className="org-chip" title="Organização">
+                <window.I.Building2 size={16}/>
+                <span>Coodex</span>
+                <window.I.ChevronsUpDown size={14} className="org-chip__indicator"/>
+              </button>
+              <button className="notif-btn" title="Notificações">
+                <window.I.Bell size={18}/>
+                <span className="notif-btn__badge">12</span>
+              </button>
+            </div>
+          </div>
+          <div className="scroll">
+            <div className="page" style={{paddingBottom: 8}}>
+              <div className="variant-switch" role="tablist" aria-label="Versão da tela">
+                <button
+                  role="tab"
+                  className={`variant-switch__btn ${variant === 'A' ? 'variant-switch__btn--active' : ''}`}
+                  onClick={() => setVariant('A')}>
+                  A — Triagem por urgência
+                </button>
+                <button
+                  role="tab"
+                  className={`variant-switch__btn ${variant === 'B' ? 'variant-switch__btn--active' : ''}`}
+                  onClick={() => setVariant('B')}>
+                  B — Por área e contexto
+                </button>
+                <button
+                  role="tab"
+                  className={`variant-switch__btn ${variant === 'C' ? 'variant-switch__btn--active' : ''}`}
+                  onClick={() => setVariant('C')}>
+                  C — Dashboard + compactos
+                </button>
+              </div>
+            </div>
+            {variant === 'A' && <VariantA pareceres={pareceres} onToggleStar={toggleStar} onOpen={open}/>}
+            {variant === 'B' && <VariantB pareceres={pareceres} onToggleStar={toggleStar} onOpen={open}/>}
+            {variant === 'C' && (
+              <VariantC
+                pareceres={pareceres}
+                onToggleStar={toggleStar}
+                onOpen={open}
+                onReclassify={setReclassifyTarget}
+                onMarkSeen={markSeen}
+                onMore={handleMore}/>
+            )}
+          </div>
+        </main>
+        {reclassifyTarget && (
+          <window.ReclassifyModal
+            parecer={reclassifyTarget}
+            onClose={() => setReclassifyTarget(null)}
+            onConfirm={confirmReclassify}/>
+        )}
+        {shareTarget && (
+          <window.ShareAnalysisModal
+            parecer={shareTarget}
+            existingParticipants={participantsByParecer[shareTarget.id] || []}
+            onClose={() => setShareTarget(null)}
+            onConfirm={confirmShare}/>
+        )}
+        {notifyTarget && (
+          <window.NotifyGroupModal
+            parecer={notifyTarget}
+            onClose={() => setNotifyTarget(null)}
+            onSubmit={confirmNotify}/>
+        )}
+        {toast && <div className="toast">{toast}</div>}
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<PageWrapper/>);
+</script>
+</body>
+</html>
